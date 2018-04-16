@@ -26,35 +26,32 @@ export class Box extends React.Component{
         }        
         
         this.props.dispatch(registerMove(id, currentPlayer, nextPlayer))
-
-        // console.log(`box ${id} clicked  by player: ${currentPlayer} next player is ${nextPlayer}`)
+        console.log('--------------------------')
+        console.log(`box ${id} clicked by ${currentPlayer} player`)
         for(let i = 0; i<directionArray.length; i++){        
-            // console.log(this.props.boxArray[id + directionArray[i]].color)
-            // console.log(typeof(this.props.boxArray[id + directionArray[i]].color))
-            console.log(this.props.boxArray[(id+directionArray[i])])
             let resultArray = [];
-            // if the box at the current direction has the same color...
             if(this.props.boxArray[id+directionArray[i]]){
                 if(this.props.boxArray[(id+directionArray[i])].color === currentPlayer){
-                // console.log(`the box to the ${directionArray[i]} matches`);
+                console.log(`the box ${directionArray[i]} spaces away is the same color`);
             }
             else if(this.props.boxArray[(id+directionArray[i])].color === -1){
                 console.log('off the board')
             }
 
             else if(this.props.boxArray[(id+directionArray[i])].color === null){
-                console.log('null')
+                console.log(`empty space ${directionArray[i]} spaces away`)
             }
 
             // if the adjacent piece does not come back as null/undefined/or the same as the
             // current player's piece, call the chainFinder function
             else {
-                // console.log(`the box to the ${directionArray[i]} is the opposite`);
+                console.log(`the box to the ${directionArray[i]} is the opposite color`);
                 this.chainFinder(id, currentPlayer, this.props.boxArray, directionArray[i])
             }
+
             }
-           
-        }
+        } 
+
     }
 
     chainFinder(currentSpot, currentPlayer, array, direction){
@@ -63,16 +60,12 @@ export class Box extends React.Component{
             // hitting an undefined or null spot - should break the chain and return
             // hitting a spot that matches the same color as the currentPlayer
                 // this should return a results array of index spots to be flipped over
-    // console.log(typeof(array[currentSpot +direction].color) === 'undefined')
+
     //         let indexCounter;
     //     while(!(typeof(array[currentSpot +direction].color) === 'undefined')){
     //           indexCounter = currentSpot + direction
     //           console.log(array[indexCounter])
-    //     }
-       
-
-                   
-        
+    //     }                
     }
 
 

@@ -17,7 +17,6 @@ export default class Board extends React.Component{
         }            
 
         this.setState({displayArray: displayArray})
-
     }
 
     render(){
