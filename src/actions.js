@@ -4,3 +4,9 @@ export const registerMove = (num, currentPlayer, nextPlayer) =>({
     currentPlayer: currentPlayer,
     nextPlayer: nextPlayer
 });
+
+export const registerChain = (array, currentPlayer) =>({
+    type: 'REGISTER_CHAIN',
+    chainArray: array,
+    player: currentPlayer,
+});

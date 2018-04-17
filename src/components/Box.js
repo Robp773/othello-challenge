@@ -1,81 +1,84 @@
 import React from 'react';
 import './Box.css';
-import { registerMove } from '../actions';
+import { registerMove, registerChain } from '../actions';
 import {connect} from 'react-redux';
 
 export class Box extends React.Component{
-  
+    constructor(props){
+        super(props);
+        this.state = {chain: []}
+    }
     boxClicked(id, currentPlayer){
-
-        let NW = -9;
-        let N =-8;
-        let NE =-7;
-        let W =-1;
-        let E = 1;
-        let SW = 7;
-        let S = 8;
-        let SE = 9; 
-        let directionArray = [NW, N, NE, W, E, SW, S, SE]
-
+        let results;
         let nextPlayer;
         if(currentPlayer === 'white'){
             nextPlayer =  'black';
         }
         else{
             nextPlayer = 'white'
-        }        
-        
-        this.props.dispatch(registerMove(id, currentPlayer, nextPlayer))
-        console.log('--------------------------')
-        console.log(`box ${id} clicked by ${currentPlayer} player`)
-        for(let i = 0; i<directionArray.length; i++){        
-            let resultArray = [];
-            if(this.props.boxArray[id+directionArray[i]]){
-                if(this.props.boxArray[(id+directionArray[i])].color === currentPlayer){
-                console.log(`the box ${directionArray[i]} spaces away is the same color`);
-            }
-            else if(this.props.boxArray[(id+directionArray[i])].color === -1){
-                console.log('off the board')
-            }
-
-            else if(this.props.boxArray[(id+directionArray[i])].color === null){
-                console.log(`empty space ${directionArray[i]} spaces away`)
-            }
-
-            // if the adjacent piece does not come back as null/undefined/or the same as the
-            // current player's piece, call the chainFinder function
-            else {
-                console.log(`the box to the ${directionArray[i]} is the opposite color`);
-                this.chainFinder(id, currentPlayer, this.props.boxArray, directionArray[i])
-            }
-
-            }
         } 
+        if(this.props.boxArray[id].color){
+            alert('Spot already taken')
+        }
+        else{
+            this.props.dispatch(registerMove(id, currentPlayer, nextPlayer))
+            this.chainFinder(id, currentPlayer, nextPlayer, this.props.boxArray)
+        }        
 
     }
 
-    chainFinder(currentSpot, currentPlayer, array, direction){
-        let resultsArray = [currentSpot]
-        // continue checking in the same direction until
-            // hitting an undefined or null spot - should break the chain and return
-            // hitting a spot that matches the same color as the currentPlayer
-                // this should return a results array of index spots to be flipped over
-
-    //         let indexCounter;
-    //     while(!(typeof(array[currentSpot +direction].color) === 'undefined')){
-    //           indexCounter = currentSpot + direction
-    //           console.log(array[indexCounter])
-    //     }                
+    chainFinder(currentSpot, currentPlayer, nextPlayer, array){
+        let NW = -9;
+        let N = -8;
+        let NE = -7;
+        let W = -1;
+        let E = 1;
+        let SW = 7;
+        let S = 8;
+        let SE = 9; 
+        let spotTracker = currentSpot;
+        let directionArray = [NW, N, NE, W, E, SW, S, SE]
+        // loop through the different directions
+        for(let i =0; i<directionArray.length; i++){
+            spotTracker = currentSpot; 
+            // console.log('-----------------------------')
+            // console.log(`for loop running for ${directionArray[i]} direction`)               
+            let results = [];
+            // check that the first spot in each direction to scan is not off the board
+            if(array[spotTracker + directionArray[i]]){
+                // console.log('next spot is not off the board')
+                // if the next spot is the opposite of the piece placed...        
+                while(array[spotTracker + directionArray[i]].color === nextPlayer){
+                    // console.log('while loop running... next spot is the opposite')
+                    if(spotTracker + directionArray[i] <= 7 || spotTracker + directionArray[i] >=56){
+                        // console.log(`end of board: ${results}`)
+                        spotTracker = currentSpot;                        
+                        return;
+                    }
+                   else {
+                       results.push(spotTracker + directionArray[i]);
+                    // increment the spot tracker to keep moving forward
+                        spotTracker = spotTracker + directionArray[i];
+                    // if the next spot is the current player, end of chain  
+                        if(array[spotTracker + directionArray[i]].color === currentPlayer){
+                            // console.log(`current player ${currentPlayer} next spot of same color is ${spotTracker + directionArray[i]}`)
+                            // console.log(`end of chainchain found: ${results}`)
+                            this.props.dispatch(registerChain(results, currentPlayer))
+                            return;                     
+                   }              
+                }        
+            }                 
+        }
     }
-
-
-
+    }
     render(){
         let arraySpot = this.props.boxArray[this.props.id];
 
       
         return(
-            <div onClick={()=>{this.boxClicked(this.props.id, this.props.currentPlayer)}} className={`box ${arraySpot.color}`}></div>
+            <div onClick={()=>{this.boxClicked(this.props.id, this.props.currentPlayer)}} className='box'>{this.props.id}
+                <div className={arraySpot.color}></div>
+            </div>
         )
     }
 }

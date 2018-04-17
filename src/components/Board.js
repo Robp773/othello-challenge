@@ -15,7 +15,6 @@ export default class Board extends React.Component{
         for(let i=0; i<this.props.boxData.length; i++){
             displayArray.push(<Box key={i} id={i}/>)
         }            
-
         this.setState({displayArray: displayArray})
     }
 
