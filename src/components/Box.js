@@ -46,26 +46,32 @@ export class Box extends React.Component{
             let results = [];
             // check that the first spot in each direction to scan is not off the board
             if(array[spotTracker + directionArray[i]]){
-                // console.log('next spot is not off the board')
                 // if the next spot is the opposite of the piece placed...        
                 while(array[spotTracker + directionArray[i]].color === nextPlayer){
-                    if(spotTracker + directionArray[i] <=0){
-                        return
+                    // if the next spot goes off the board return
+                    if(spotTracker + directionArray[i] <=0 || spotTracker + directionArray[i] >=63 ){
+                        return;
                     }
-                        // if current spot being checked is on the edges of the board
-                        if(spotTracker + directionArray[i] <=7 || spotTracker + directionArray[i] >=56){
-                            // and the direction being searched is left to right
-                            if(directionArray[i] === -1 || directionArray[i] === 1){
-                                
+                    else if(directionArray[i] === 1 || directionArray[i] === -1){
+                        let overlapArray = [8 ,16, 24, 32, 40, 48, 56, 7, 15, 23, 31, 39, 47, 55]
+
+                        for(let y=0; y<overlapArray.length; y++){
+                            if(spotTracker + directionArray[i] === overlapArray[y]){
+                                return;
                             }
-                            else if(array[spotTracker + directionArray[i]].color === nextPlayer){
+                        }
+                    }
+
+                        // if current spot being checked is on the top or bottom edges of the board
+                      else if(spotTracker + directionArray[i] <=7 || spotTracker + directionArray[i] >=56){
+                            // and the direction being searched is left to right 
+                            // the next spot is the opposite player end the chain and return 
+                            if(array[spotTracker + directionArray[i]].color === nextPlayer && directionArray[i] * directionArray[i] !== 1){
                                 return;
                             }
                             // else if the current spot was found going north/south or diagonally
                             // and the current player's piece is found 
                             else if(array[spotTracker + directionArray[i]].color === currentPlayer){
-                                console.log('on the edge but not moving left or right')
-                                console.log(results.length)
                                 // if there was a chain involved at this point, send it to store
                                 if(results.length > 0){
                                     this.props.dispatch(registerChain(results, currentPlayer))
@@ -74,9 +80,9 @@ export class Box extends React.Component{
                             }
                         }
                        results.push(spotTracker + directionArray[i]);
-                    // increment the spot tracker to keep moving forward
+                        // increment the spot tracker to keep moving forward
                         spotTracker = spotTracker + directionArray[i];
-                    // if the next spot is the current player, end of chain  
+                        // if the next spot is the current player, end of chain  
                         if(array[spotTracker + directionArray[i]].color === currentPlayer){
                             // console.log(`current player ${currentPlayer} next spot of same color is ${spotTracker + directionArray[i]}`)
                             // console.log(`end of chainchain found: ${results}`)
