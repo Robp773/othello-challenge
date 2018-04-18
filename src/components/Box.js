@@ -49,13 +49,30 @@ export class Box extends React.Component{
                 // console.log('next spot is not off the board')
                 // if the next spot is the opposite of the piece placed...        
                 while(array[spotTracker + directionArray[i]].color === nextPlayer){
-                    // console.log('while loop running... next spot is the opposite')
-                    if(spotTracker + directionArray[i] <= 7 || spotTracker + directionArray[i] >=56){
-                        // console.log(`end of board: ${results}`)
-                        spotTracker = currentSpot;                        
-                        return;
+                    if(spotTracker + directionArray[i] <=0){
+                        return
                     }
-                   else {
+                        // if current spot being checked is on the edges of the board
+                        if(spotTracker + directionArray[i] <=7 || spotTracker + directionArray[i] >=56){
+                            // and the direction being searched is left to right
+                            if(directionArray[i] === -1 || directionArray[i] === 1){
+                                
+                            }
+                            else if(array[spotTracker + directionArray[i]].color === nextPlayer){
+                                return;
+                            }
+                            // else if the current spot was found going north/south or diagonally
+                            // and the current player's piece is found 
+                            else if(array[spotTracker + directionArray[i]].color === currentPlayer){
+                                console.log('on the edge but not moving left or right')
+                                console.log(results.length)
+                                // if there was a chain involved at this point, send it to store
+                                if(results.length > 0){
+                                    this.props.dispatch(registerChain(results, currentPlayer))
+                                    return;             
+                                }
+                            }
+                        }
                        results.push(spotTracker + directionArray[i]);
                     // increment the spot tracker to keep moving forward
                         spotTracker = spotTracker + directionArray[i];
@@ -63,18 +80,15 @@ export class Box extends React.Component{
                         if(array[spotTracker + directionArray[i]].color === currentPlayer){
                             // console.log(`current player ${currentPlayer} next spot of same color is ${spotTracker + directionArray[i]}`)
                             // console.log(`end of chainchain found: ${results}`)
-                            this.props.dispatch(registerChain(results, currentPlayer))
-                            return;                     
+                            this.props.dispatch(registerChain(results, currentPlayer))                     
                    }              
                 }        
             }                 
-        }
+        
     }
     }
     render(){
         let arraySpot = this.props.boxArray[this.props.id];
-
-      
         return(
             <div onClick={()=>{this.boxClicked(this.props.id, this.props.currentPlayer)}} className='box'>{this.props.id}
                 <div className={arraySpot.color}></div>
