@@ -10,3 +10,10 @@ export const registerChain = (array, currentPlayer) =>({
     chainArray: array,
     player: currentPlayer,
 });
+
+export const updateTotals = (white, black, spaces) =>({
+    type: 'UPDATE_TOTALS',
+    whiteTotal: white,
+    blackTotal: black,
+    spacesTotal: spaces
+});
