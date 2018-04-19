@@ -4,12 +4,8 @@ import { registerMove, registerChain } from '../actions';
 import {connect} from 'react-redux';
 
 export class Box extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {chain: []}
-    }
+
     boxClicked(id, currentPlayer){
-        let results;
         let nextPlayer;
         if(currentPlayer === 'white'){
             nextPlayer =  'black';
@@ -40,9 +36,7 @@ export class Box extends React.Component{
         let directionArray = [NW, N, NE, W, E, SW, S, SE]
         // loop through the different directions
         for(let i =0; i<directionArray.length; i++){
-            spotTracker = currentSpot; 
-            // console.log('-----------------------------')
-            // console.log(`for loop running for ${directionArray[i]} direction`)               
+            spotTracker = currentSpot;                      
             let results = [];
             // check that the first spot in each direction to scan is not off the board
             if(array[spotTracker + directionArray[i]]){
@@ -84,8 +78,6 @@ export class Box extends React.Component{
                         spotTracker = spotTracker + directionArray[i];
                         // if the next spot is the current player, end of chain  
                         if(array[spotTracker + directionArray[i]].color === currentPlayer){
-                            // console.log(`current player ${currentPlayer} next spot of same color is ${spotTracker + directionArray[i]}`)
-                            // console.log(`end of chainchain found: ${results}`)
                             this.props.dispatch(registerChain(results, currentPlayer))                     
                    }              
                 }        
@@ -93,6 +85,7 @@ export class Box extends React.Component{
         
     }
     }
+
     render(){
         let arraySpot = this.props.boxArray[this.props.id];
         return(
@@ -105,6 +98,6 @@ export class Box extends React.Component{
 
 const mapStateToProps = state => ({
 currentPlayer: state.playerTurn,
-boxArray: state.boxArray
+// boxArray: state.boxArray
 });
 export default connect(mapStateToProps)(Box);
