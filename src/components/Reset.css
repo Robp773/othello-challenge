@@ -1,0 +1,13 @@
+#resetBG{
+    margin-top: 10px;
+    padding: 3px;
+    background: green;
+    display: inline-block;
+}
+#resetBGTwo{
+    background: beige;
+    padding: 5px;
+}
+#resetBtn{
+    font-size: 20px;
+}

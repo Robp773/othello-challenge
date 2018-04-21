@@ -2,12 +2,14 @@ import React from 'react';
 import Board from './Board'
 import {connect} from 'react-redux';
 import Banner from './Banner';
+import Reset from './Reset';
 import {updateTotals} from '../actions'
 
 
 export class Main extends React.Component{
 
     componentWillUpdate(){
+
         let whiteTotal = 0;
         let blackTotal = 0;
         let spacesTotal;
@@ -21,6 +23,7 @@ export class Main extends React.Component{
     }
 
     render(){
+        console.log(this.props.spacesTotal)
         return(            
             <div>
                 <Banner 
@@ -33,12 +36,12 @@ export class Main extends React.Component{
                     turn={this.props.playerTurn} 
                     boxData={this.props.boxArray}
                 />
+                <Reset/>
             </div>
         )
     }
 }
 const mapStateToProps = state => ({
-    newGame: state.newGame,
     playerTurn: state.playerTurn,
     boxArray: state.boxArray,
     whiteTotal: state.whiteCount,

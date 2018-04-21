@@ -17,3 +17,7 @@ export const updateTotals = (white, black, spaces) =>({
     blackTotal: black,
     spacesTotal: spaces
 });
+
+export const resetState = () =>({
+    type: 'RESET_STATE'
+});
