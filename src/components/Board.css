@@ -1,5 +1,11 @@
+
+
+
+
 #boardParent{
-    width: 95%;
-    background: grey;
+    margin: auto;
+    border: 1px solid black;
+    width: 496px;
+    background: green;
     text-align: center;
 }

@@ -1,7 +1,12 @@
 #bannerParent{
+    font-size: 15px;
     text-align: center;
 }
 .banner{
     display: inline-block;
     width: 30%;
+}
+@media screen and (min-width: 1000px) {
+
+
 }

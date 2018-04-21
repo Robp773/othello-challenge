@@ -1,8 +1,9 @@
 .box{
+    font-size: 10px;
     position: relative;
     border: 1px solid black;
-    width: 12%;
-    height: 95px;
+    width: 60px;
+    height: 60px;
     display: inline-block;
     text-align: center;
 }
