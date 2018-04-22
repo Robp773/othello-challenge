@@ -4,11 +4,13 @@ body {
   font-size: 0;
   font-family: sans-serif;
   width: fit-content;
+  text-align: center;
 }
 
 @media screen and (min-width: 750px) {
 body{
   width: initial;
+  text-align: center;
 }
 
 }
