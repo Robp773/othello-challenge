@@ -12,26 +12,37 @@ function getInitialState() {
 		whiteCount: 2,
 		blackCount: 2,
 		spaceCount: 60,
-		chainArray: [],
 		boxArray: boxArray,
 	};
 }
 
 export const reducer =  (state = getInitialState(), action) =>{
 
-    // need to figure out how to do this differently
     if(action.type === 'REGISTER_MOVE'){
         const newState = {...state};
         newState.boxArray[action.boxNum] = {color: action.currentPlayer}
         newState.playerTurn = action.nextPlayer;
+        newState[`${action.currentPlayer}Count`]++;
+        newState.spaceCount--;
         return Object.assign({}, newState);
     }
 
     if(action.type === 'REGISTER_CHAIN'){
+        const newState = {...state};
         for(let i=0; i<action.chainArray.length; i++){
-            state.boxArray[action.chainArray[i]].color = action.player
+            newState.boxArray[action.chainArray[i]].color = action.player
         }
-       return Object.assign({}, state, {chainArray: action.chainArray})
+        let whiteTotal = 0;
+        let blackTotal = 0;
+        let spacesTotal;
+        for(let i=0; i<newState.boxArray.length; i++){
+            if(newState.boxArray[i].color !== null){
+                newState.boxArray[i].color === 'white' ? whiteTotal++ : blackTotal++;
+            }
+        }
+        spacesTotal = 64 - whiteTotal - blackTotal;   
+   
+        return Object.assign({}, newState, {spaceCount: spacesTotal, whiteCount: whiteTotal, blackCount: blackTotal} )
     };
 
     if(action.type === 'UPDATE_TOTALS'){
@@ -41,6 +52,6 @@ export const reducer =  (state = getInitialState(), action) =>{
     if(action.type === 'RESET_STATE'){
         return Object.assign({}, getInitialState());
     }
-    
+
 return state;
 }

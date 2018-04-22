@@ -8,22 +8,8 @@ import {updateTotals} from '../actions'
 
 export class Main extends React.Component{
 
-    componentWillUpdate(){
-
-        let whiteTotal = 0;
-        let blackTotal = 0;
-        let spacesTotal;
-        for(let i=0; i<this.props.boxArray.length; i++){
-            if(this.props.boxArray[i].color !== null){
-                this.props.boxArray[i].color === 'white' ? whiteTotal++ : blackTotal++;
-            }
-        }
-        spacesTotal = 64 - whiteTotal - blackTotal;        
-        this.props.dispatch(updateTotals(whiteTotal, blackTotal, spacesTotal))
-    }
-
     render(){
-        console.log(this.props.spacesTotal)
+        console.log('render')
         return(            
             <div>
                 <Banner 
