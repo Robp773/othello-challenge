@@ -1,106 +1,46 @@
-const initialState = {
-    newGame: true,
-    playerTurn: 'white',
-    whiteCount: 2,
-    blackCount: 2,
-    spaceCount: 64,
-    chainArray: [],
-    boxArray: [
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        // 9
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        // 18
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        // 27 28
-        {color: 'white'},
-        {color: 'black'},
+function getInitialState() {
+	let boxArray = [];
+	boxArray.length = 64;
+	boxArray.fill({color: null}, 0, 64);
+	boxArray[27] = {color: 'white'};
+	boxArray[36] = {color: 'white'};
+	boxArray[28] = {color: 'black'};
+	boxArray[35] = {color: 'black'};
+	return {
+		newGame: true,
+		playerTurn: 'white',
+		whiteCount: 2,
+		blackCount: 2,
+		spaceCount: 60,
+		chainArray: [],
+		boxArray: boxArray,
+	};
+}
 
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
+export const reducer =  (state = getInitialState(), action) =>{
 
-        // 36 / 37
-        {color: 'black'},
-        {color: 'white'},
-
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},               
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null}, 
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-        {color: null},
-    ]
-};
-
-export const reducer =  (state = initialState, action) =>{
-
+    // need to figure out how to do this differently
     if(action.type === 'REGISTER_MOVE'){
-        state.boxArray[action.boxNum] = {color: action.currentPlayer}
-        state.playerTurn = action.nextPlayer;
-        return Object.assign({}, state);
+        const newState = {...state};
+        newState.boxArray[action.boxNum] = {color: action.currentPlayer}
+        newState.playerTurn = action.nextPlayer;
+        return Object.assign({}, newState);
     }
 
     if(action.type === 'REGISTER_CHAIN'){
         for(let i=0; i<action.chainArray.length; i++){
             state.boxArray[action.chainArray[i]].color = action.player
         }
-        state.chainArray = action.chainArray;
-       return Object.assign({}, state)
+       return Object.assign({}, state, {chainArray: action.chainArray})
     };
 
     if(action.type === 'UPDATE_TOTALS'){
-        state.whiteCount = action.whiteTotal;
-        state.blackCount = action.blackTotal;
-        state.spaceCount = action.spacesTotal;
-        return Object.assign({}, state)
+        return Object.assign({}, state, {whiteCount: action.whiteTotal, blackCount: action.blackTotal, spaceCount: action.spacesTotal})
     }
+
+    if(action.type === 'RESET_STATE'){
+        return Object.assign({}, getInitialState());
+    }
+    
 return state;
 }
